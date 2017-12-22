@@ -1,4 +1,8 @@
 refs/
+report/*.aux
+report/*.bbl
+report/*.blg
+report/*.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
