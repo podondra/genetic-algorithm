@@ -10,12 +10,13 @@ def evaluate_constrain(individual, weights, m):
 def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism):
     # statistics
     stats = tools.Statistics(lambda individual: individual.fitness.values)
-    stats.register('avg', numpy.mean)
     stats.register('min', numpy.min)
     stats.register('max', numpy.max)
+    stats.register('avg', numpy.mean)
+    stats.register('std', numpy.std)
     # logbook
     logbook = tools.Logbook()
-    logbook.header = ['gen', 'min', 'avg', 'max']
+    logbook.header = ['gen', 'new', 'min', 'max', 'avg', 'std']
 
     # evaluate the entire population
     fitnesses = map(toolbox.evaluate, population)
@@ -30,6 +31,7 @@ def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism):
     # rest is for elite individuals
     n_select = len(population) - len(halloffame)
 
+    # TODO implement stopping criterium
     # begin the evolution
     for g in range(1, ngen + 1):
         # select the next generation individuals
@@ -53,7 +55,7 @@ def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism):
 
         # append the current generation statistics to the logbook
         record = stats.compile(population)
-        logbook.record(gen=g, **record)
+        logbook.record(gen=g, new=len(invalids), **record)
         print(logbook.stream)
 
     return population, logbook, halloffame
