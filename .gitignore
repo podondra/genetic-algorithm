@@ -1,5 +1,7 @@
 refs/
+report/example_paper.*
 report/*.aux
+report/*.out
 report/*.bbl
 report/*.blg
 report/*.pdf
