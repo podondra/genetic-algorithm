@@ -1,5 +1,15 @@
 import pandas
 from matplotlib import pyplot
+import itertools
+
+
+def sample_instances(instances, n_samples):
+    random.seed(16)
+    index = []
+    for s in instance_sizes:
+        index += list(itertools.product([s],
+                      random.sample(range(499), n_samples)))
+    return instances.loc[index]
 
 
 def relative_error(c_opt, c_apx):
