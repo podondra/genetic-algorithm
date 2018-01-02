@@ -79,9 +79,7 @@
 TODO abstract.
 \end{abstract}
 
-\section{Introduction}
-
-TODO intro.
+%\section{Introduction}
 
 \section{0/1 Knapsack Problem}
 
@@ -193,21 +191,59 @@ from previous generation to next generation.
 
 \section{Experiments}
 
-Experiments were carried out on Intel Core i5-3337U CPU (1.80GHz).
+There is many parameters which need to be set in genetic algorithm.
+It is impossible to explore them all.
+Therefore, a heuristic approach has to be taken.
 
-TODO track development of population during algorithm run.
-TODO graphs, computational time, relative error.
-TODO experiment with different parameters setting.
-TODO evaluated experiments.
-TODO cite~\cite{dejong1975} for 50--100 individuals,
-crossover rate was ~0.6 per pair of parents
-and the best mutation rate was 0.001 per bit.
+For purpose of this work firstly fitness function is chosen
+from the two candidates.
+Parameters are set according to proposition in~\cite{dejong1975}.
+Population is of size 100 individuals,
+two point crossover with rate 0.6 per pair of parents
+and mutation rate is 0.001 per bit.
+One elite individual is moved to next generation.
+Evolution is stopped if there is no increase by 1 in fitness
+value of average generation's fitness.
+
+Experiments were carried out on Intel Core i5-3337U CPU (1.80GHz)
+using instances of sizes 32, 50, 75, 100, 150, 200, 500.
+There were 500 instances for each size.
+
+\subsection{Fitness Functions}
+
+This work proposed two different fitness functions.
+Figure~\ref{fitness} presents their experimental evaluation.
+Both fitness functions performance comparably on average
+but the maximal relative error is much higher for some instance sizes.
+From that instability of fitness function with penalization can be inferred.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{fitness}}
+\caption{The top plot shows relative error of fitness function with
+correction and bottom plot relative error of fitness function with
+penalization.}
+\label{fitness}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+Thus, for further experiments fitness function with correction will be used
+as it gives better overall performance for different instances.
+
+\subsection{Selection Method}
+
+\subsection{Parameters}
+
+TODO graph of computational time.
 TODO cite~\cite{schaffer1989} population size 20--30,
 crossover rate 0.75--0.95
-and mutation rate 0.005--0.01
+and mutation rate 0.005--0.01.
 
 \section{Conclusion}
 
+TODO track development of population during algorithm run.
 TODO infer conclusion.
 
 % In the unusual situation where you want a paper to appear in the
