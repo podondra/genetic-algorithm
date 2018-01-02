@@ -7,7 +7,8 @@ def evaluate_constrain(individual, weights, m):
     return sum(x * w for x, w in zip(individual, weights)) <= m
 
 
-def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism):
+def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism,
+                      verbose=False):
     # statistics
     stats = tools.Statistics(lambda individual: individual.fitness.values)
     stats.register('min', numpy.min)
@@ -56,7 +57,8 @@ def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism):
         # append the current generation statistics to the logbook
         record = stats.compile(population)
         logbook.record(gen=g, new=len(invalids), **record)
-        print(logbook.stream)
+        if verbose:
+            print(logbook.stream)
 
     return population, logbook, halloffame
 
@@ -73,7 +75,7 @@ def evaluate_penalization(individual, weights, values, m):
 
 
 def correct_individual(individual, weights, m):
-    while evaluate_constrain(individual, weights, m) is False:
+    while not evaluate_constrain(individual, weights, m):
         indexes = [index for index, x in enumerate(individual) if x]
         individual[random.choice(indexes)] = 0
     return individual
