@@ -76,7 +76,11 @@
 %\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
-TODO abstract.
+This work presents a simple genetic algorithm for knapsack problem.
+Two fitness function are proposed.
+Followed by evaluation of some selection method and parameters setting.
+Conclusion is that tournament selection of size 3, cross-over rate 0.6
+and mutation rate 0.001 work best for most knapsack problem instances.
 \end{abstract}
 
 %\section{Introduction}
@@ -203,7 +207,17 @@ two point crossover with rate 0.6 per pair of parents
 and mutation rate is 0.001 per bit.
 One elite individual is moved to next generation.
 Evolution is stopped if there is no increase by 1 in fitness
-value of average generation's fitness.
+value of next 50 average generation's fitness.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{evolution}}
+\caption{Evolution of population for sample knapsack problem.}
+\label{evolution}
+\end{center}
+\vskip -0.2in
+\end{figure}
 
 Experiments were carried out on Intel Core i5-3337U CPU (1.80GHz)
 using instances of sizes 32, 50, 75, 100, 150, 200, 500.
@@ -213,9 +227,10 @@ There were 500 instances for each size.
 
 This work proposed two different fitness functions.
 Figure~\ref{fitness} presents their experimental evaluation.
-Both fitness functions performance comparably on average
-but the maximal relative error is much higher for some instance sizes.
-From that instability of fitness function with penalization can be inferred.
+Both fitness functions perform comparably on average
+but the maximal relative error is much higher
+for fitness function with penalization.
+From that its instability can be inferred.
 
 \begin{figure}[ht]
 \vskip 0.2in
@@ -234,17 +249,73 @@ as it gives better overall performance for different instances.
 
 \subsection{Selection Method}
 
+Selection is important part of a genetic algorithm selecting parents of next
+generation.
+There are many possible options such as roulette, tournament
+or random selection.
+This work compares roulette to tournament selections.
+
+Figure~\ref{fitness} shows results for roulette selection
+and figure~\ref{tournament} results for tournament selection of size 3.
+It is obvious that tournament selection outperforms roulette selection in
+most cases.
+Only the maximal relative error of some small instances are better for
+roulette selection.
+For further evaluations tournament of size 3 is used.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{tournament}}
+\caption{Maximal, average and minimal relative error of tournament selection
+of size 3.}
+\label{tournament}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
 \subsection{Parameters}
 
-TODO graph of computational time.
-TODO cite~\cite{schaffer1989} population size 20--30,
-crossover rate 0.75--0.95
-and mutation rate 0.005--0.01.
+Parameters as crossover and mutation rate are very import in a genetic
+algorithm.
+In this subsection recommendation from~\cite{schaffer1989} are used.
+Population size of 30, crossover rate of 0.95 and mutation rate of 0.01
+are tested.
+
+Result is presented in figure~\ref{params}
+and unfortunately is worse than with original parameter setting.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{params}}
+\caption{Relative error for population size 30, crossover rate 0.95
+and mutation rate 0.01.}
+\label{params}
+\end{center}
+\vskip -0.2in
+\end{figure}
 
 \section{Conclusion}
 
-TODO track development of population during algorithm run.
-TODO infer conclusion.
+In conclusion, this work show that a simple genetic algorithm
+when correctly parameterized can solve even big instances of knapsack problem
+with small relative error around 2\% (see figure~\ref{tournament}).
+
+A concern might be computation time which depends on population size
+and instance size (see figure~\ref{time})
+but further experiments should be able to reduce it.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{time}}
+\caption{Dependence of CPU time on instance size for tournament selection
+of size 3.}
+\label{time}
+\end{center}
+\vskip -0.2in
+\end{figure}
 
 % In the unusual situation where you want a paper to appear in the
 % references without citing it in the main text, use \nocite
