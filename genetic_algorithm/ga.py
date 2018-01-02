@@ -7,7 +7,7 @@ def evaluate_constrain(individual, weights, m):
     return sum(x * w for x, w in zip(individual, weights)) <= m
 
 
-def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism,
+def genetic_algorithm(population, toolbox, early_stop, cxpb, mutpb, elitism,
                       verbose=False):
     # statistics
     stats = tools.Statistics(lambda individual: individual.fitness.values)
@@ -24,6 +24,9 @@ def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism,
     for individual, fitness in zip(population, fitnesses):
         individual.fitness.values = fitness
 
+    # init population statistics
+    record_stats(stats, logbook, population, population, 0, verbose)
+
     # halloffame
     halloffame = tools.HallOfFame(maxsize=elitism)
     halloffame.update(population)
@@ -32,9 +35,12 @@ def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism,
     # rest is for elite individuals
     n_select = len(population) - len(halloffame)
 
-    # TODO implement stopping criterium
     # begin the evolution
-    for g in range(1, ngen + 1):
+    g = 1
+    last_inc = g
+    inc, gens_inc = early_stop
+    best_avg = logbook[0]['avg']
+    while g - last_inc < gens_inc:
         # select the next generation individuals
         offspring = toolbox.select(population, k=n_select)
         # clone the selected individuals
@@ -55,12 +61,23 @@ def genetic_algorithm(population, toolbox, ngen, cxpb, mutpb, elitism,
         halloffame.update(population)
 
         # append the current generation statistics to the logbook
-        record = stats.compile(population)
-        logbook.record(gen=g, new=len(invalids), **record)
-        if verbose:
-            print(logbook.stream)
+        record_stats(stats, logbook, population, invalids, g, verbose)
+
+        # for early stop
+        if logbook[-1]['avg'] + inc >= best_avg:
+            best_avg = logbook[-1]['avg']
+            last_inc = g
+
+        g += 1
 
     return population, logbook, halloffame
+
+
+def record_stats(stats, logbook, population, invalids, g, verbose):
+    record = stats.compile(population)
+    logbook.record(gen=g, new=len(invalids), **record)
+    if verbose:
+        print(logbook.stream)
 
 
 def evaluate_penalization(individual, weights, values, m):
