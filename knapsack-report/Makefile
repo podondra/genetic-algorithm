@@ -1,4 +1,4 @@
-TARGET = report
+TARGET = knapsack-report
 
 all: pdf
 

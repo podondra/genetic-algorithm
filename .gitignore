@@ -1,10 +1,10 @@
 refs/
-report/example_paper.*
-report/*.aux
-report/*.out
-report/*.bbl
-report/*.blg
-report/report.pdf
+example_paper.*
+*.aux
+*.out
+*.bbl
+*.blg
+*-report.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
