@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{booktabs} % for professional tables
+\usepackage{amsmath}
 
 % hyperref makes hyperlinks in the resulting PDF.
 % If your build breaks (sometimes temporarily if a hyperlink spans a page)
@@ -28,7 +29,7 @@
 \begin{document}
 
 \twocolumn[
-\icmltitle{Genetic Algorithm for SAT Problem}
+\icmltitle{Genetic Algorithm for Weighted MAX-SAT Problem}
 
 % It is OKAY to include author information, even for blind
 % submissions: the style file will automatically remove it for you
@@ -78,9 +79,42 @@
 \begin{abstract}
 \end{abstract}
 
-\section{Introduction}
+\section{Goal}
 
-\section{Problem}
+This work aims to use a genetic algorihtm to solve as wide spectrum of
+MAX-SAT problems defined in next section~\ref{problem} as possible.
+Thus, the task consists of finding approriate setting of genetic
+algorithm's parameters.
+
+\section{Weighted MAX-SAT Problem}
+\label{problem}
+
+This section defines weighted maximum satisfiability problem.
+Given a Boolean formula $F$ in conjunctive normal form
+with variables $X = (x_1, x_2, \dots, x_n)$.
+Moreover, there are interger weights $W = (w_1, w_2, \dots, w_n)$.
+Find values $Y = (y_1, y_2, \dots, y_n\}$ of variables from $X$
+such that $F(Y) = 1$
+and sum of weight of variable that has value 1 is maximal.
+
+\subsection{Example}
+
+Let $n = 4$ be the number of clauses,
+variables' weights $W = (2, 4, 1, 6)$, and formula $F$:
+
+\begin{align}
+F &= (x_1 + x_3' + x_4) \cdot (x_1' + x_2 + x_3') \nonumber \\
+&\quad \cdot (x_1 + x_2 + x_3' + x_4') \cdot (x_2' + x_3)
+\cdot (x_3' + x_4'). \nonumber
+\end{align}
+
+Configuration which satisfy constrain and $F = 1$:
+
+$$X = (0, 0, 0, 1) \quad S = 6,$$
+$$X = (1, 0, 0, 1) \quad S = 2 + 6 = 8 \quad (\text{optimal}),$$
+$$X = (1, 1, 1, 0) \quad S = 2 + 4 + 2 = 7,$$
+
+where $S$ is the weight sum.
 
 \section{Genetic Algorithm}
 
