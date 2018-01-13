@@ -8,7 +8,7 @@ def evaluate_constrain(individual, weights, m):
 
 
 def genetic_algorithm(population, toolbox, early_stop, cxpb, mutpb, elitism,
-                      verbose=False):
+                      indpb, decay=1, verbose=False):
     # statistics
     stats = tools.Statistics(lambda individual: individual.fitness.values)
     stats.register('min', numpy.min)
@@ -41,6 +41,8 @@ def genetic_algorithm(population, toolbox, early_stop, cxpb, mutpb, elitism,
     inc, gens_inc = early_stop
     best_avg = logbook[0]['avg']
     while g - last_inc < gens_inc:
+        toolbox.register('mutate', tools.mutFlipBit, indpb=indpb)
+        indpb *= decay
         # select the next generation individuals
         offspring = toolbox.select(population, k=n_select)
         # clone the selected individuals
