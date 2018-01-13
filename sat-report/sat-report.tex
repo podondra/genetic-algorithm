@@ -79,7 +79,16 @@ Prague, Czech Republic
 %\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
-TODO abstract.
+This work presents results of genetic algorithm application to weighted
+3-SAT problem.
+A fitness function composed of two parts is proposed.
+It is show that for this fitness function tournament selection is better
+than roulette.
+Results show that crossover is not that important for the genetic algorithm
+and only mutation produces better results.
+Finally mutation decay is introduced as way to control the algorithm stability.
+Also experiments are evaluated on four different difficulties of 3-SAT
+problem base on clauses-to-variables ratio.
 \end{abstract}
 
 \section{Goal}
@@ -277,8 +286,8 @@ if average fitness of last 100 generation does not increase by more than 1.
 Fitness function employed in this work is derived from MAX-SAT fitness
 function~\cite{dejong1989} after reading \cite{gottlieb2002}
 and \cite{ellerweg2004}.
-MAX-SAT problem is concern with maximizing number of satisfied clauses.
-Thus it fitness function is the number of satisfied clauses:
+MAX-SAT problem is concerned with maximizing number of satisfied clauses.
+Thus its fitness function is the number of satisfied clauses:
 
 $$f_{\text{MAX-SAT}}(Y) = c_1(Y) + \dots + c_m(Y),$$
 
@@ -308,22 +317,20 @@ variable and $m$ is the number of clauses in formula $F$.
 
 This subsection present results of default parameters setting described above.
 It shows very poor performance
-because it is able to satisfy only easy instances
-and also is not that robust.
+because it is able to satisfy only easy instances.
 
-Table~\ref{result-table} contains success rate which is defined ratio
+Table~\ref{result-table} contains success rate which is defined as ratio
 of satisfied formulas to number of formulas
 in corresponding difficulty category.
-Then, there is an average number of unsatisfied clauses.
-
+Then, there is an average number of unsatisfied clauses.  
 It is obvious that basically parameterized genetic algorithm has problem
 with finding chromosome which satisfy non-trivial formulas.
-It shows for how many formulas the algorithm was able to find satisfiable
-assignment and if it was not able what is the average number of unsatisfied
-clauses.
 
 \begin{table}[ht]
-\caption{TODO}
+\caption{Result in term of success rate for different approaches and
+problem difficulties.
+\textsc{SR} refers to success rate
+and \textsc{Unsatisfied} to average number of unsatisfied clauses.}
 \label{result-table}
 \vskip 0.15in
 \begin{center}
@@ -357,15 +364,15 @@ Approach & Difficulty & SR & Unsatisfied \\
 
 Robustness of this method is evaluated in figures~\ref{basic-boxplot}
 and \ref{basic-progress}.
-This figure presents boxplot of best fitness value from 30 runs
+Figure~\ref{basic-boxplot} presents boxplot of best fitness value from 30 runs
 on easy instance with clauses-to-variables ratio of 1.0.
 Average fitness value was 22873.93 with standard deviation 686.26.
 Although standard deviation seems high it questionable if it is good or not.
 Because weights are sampled uniformly between values from 1 to 1024
-it is expected that average fitness value is about
-$\frac{1024 - 1} / 2 = 511.5$
+it is expected that average variables' weight is about
+511.5 (expected value of uniform distribution $\frac{1024 - 1}{2}$)
 and really the average weight for this instance is 527.94.
-Then it would mean that the deviation in only one thing missing.
+Then it would mean that the deviation in only one variable set differently.
 
 \begin{figure}[ht]
 \vskip 0.2in
@@ -393,21 +400,21 @@ It almost seems that the algorithm is only exploiting one satisfiable solution.}
 
 \subsection{Selection}
 
-One problem which prevents exploration might be roulette selection
+One problem which might prevents exploration could be roulette selection
 because as soon as satisfiable individual is found
 it is very unlikely to select unsatisfiable individual during selection
 due to very high fitness in comparison with the negative fitness individuals.
 Therefore tournament selection might explore more.
 
 Table~\ref{result-table} show that indeed this can significantly improve
-success rate but for the instances with clauses-to-variable ratio of 3.24
+success rate but for the instances with clauses-to-variables ratio of 3.24
 and 4.36 it is hard to find a satisfiable assignments.
 
 \subsection{Crossover and Mutation}
 
 Proposed in~\cite{park1995} crossover is considered marginal.
-Therefore an experiment with crossover rate 0.0 and higher mutation rate 0.01
-is carried out.
+Therefore an experiment with crossover rate set to zero
+and higher mutation rate 0.01 is carried out.
 
 As shown in table~\ref{result-table} this really improves success rate even
 for the most of second hardest instances.
@@ -421,7 +428,7 @@ Figure~\ref{mutation-progress} show a progress of generation's fitness value
 on difficult instance with clauses-to-variables ratio 3.24.
 The figure shows that there is a lot of exploration
 and almost no exploitation probably due to high randomness of mutation.
-But still there is the tournament selection which should drive the evolution.
+But still there is the tournament selection which drives the evolution.
 
 \begin{figure}[ht]
 \vskip 0.2in
@@ -458,15 +465,26 @@ instance with clauses-to-variables 3.24 achieved by mutation decay.}
 In order to decide if the standard deviation is big the genetic algorithm
 was run without mutation decay and with mutation decay of value 0.99 on
 hard instance (3.24 clauses-to-variables ratio)
-and 30 runs average of best fitness is presented.
+and 30 runs' average of best fitness is presented.
 Without decay the average best fitness is $16693.48 \pm 1339.39$
 and with decay $15819.30 \pm 974.97$.
-Surely decay helps to exploit and gives more stable solution
-and so should be preferred but is not that robust. 
+Surely decay helps to give more stable solution and so should be preferred. 
 
 \section{Conclusion}
 
-TODO conclusion.
+This work presents parameters for genetic algorithm which can relatively
+well solve (not the hardest instances) weighted 3-SAT problem.
+The success rate of the genetic algorithm is improved
+by tournament selection instead of roulette selection
+and by marginalization of crossover.
+It is shown that only mutation is able to find more satisfiable
+assignments than when combined crossover.
+and further that mutation decay is able to stabilize the algorithm.
+Although the resulting algorithm cannot solve the most difficult
+instances of 3-SAT it is still good result as almost no domain knowledge is
+used.
+It is obvious that performance can be improved by methods proposed
+in~\cite{ellerweg2004} or \cite{gottlieb2002}.
 
 % In the unusual situation where you want a paper to appear in the
 % references without citing it in the main text, use \nocite
