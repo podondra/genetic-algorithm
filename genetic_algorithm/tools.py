@@ -3,6 +3,32 @@ from matplotlib import pyplot
 import itertools
 
 
+def parse_dimacs(dimacs_file):
+    with open(dimacs_file) as f:
+        # read comments and problem line
+        for line in f:
+            # ignore comments
+            if line[0] == 'c':
+                continue
+            if line[0] == 'p':
+                _, _, variables, clauses = line.split()
+                n, m = int(variables), int(clauses)
+                break
+        raw_formula = iter(f.read().split())
+    formula = []
+    # for each clause
+    for j in range(m):
+        clause = []
+        while True:
+            var = int(next(raw_formula))
+            # append variables to a clause until 0
+            if var == 0:
+                formula.append(clause)
+                break
+            clause.append(var)
+    return n, m, formula
+
+
 def sample_instances(instances, n_samples):
     random.seed(16)
     index = []
@@ -16,13 +42,15 @@ def relative_error(c_opt, c_apx):
     return (c_opt - c_apx) / c_opt
 
 
-def plot_ga_progress(logbook, optimum):
+def plot_ga_progress(logbook, optimum=None):
     gs = logbook.select('gen')
     mins = logbook.select('min')
     avgs = logbook.select('avg')
     maxs = logbook.select('max')
 
-    pyplot.axhline(optimum, label='optimum', color='red')
+    if optimum:
+        pyplot.axhline(optimum, label='optimum', color='red')
+
     pyplot.scatter(gs, maxs, label='max', marker='.')
     pyplot.scatter(gs, avgs, label='avg', marker='.')
     pyplot.scatter(gs, mins, label='min', marker='.')
