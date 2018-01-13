@@ -120,7 +120,7 @@ only satisfiable instances are included.
 
 The instances are in DIMACS format
 which means that they do not contain weights so they are uniformly randomly
-generated from set of natural numbers less or equal than TODO.
+generated from set of natural numbers less or equal than 1024.
 The upper bound should affect the fitness of an individual
 therefore such arbitrary number was chosen.
 
@@ -139,7 +139,38 @@ giving clauses-to-variables ratio of 4.36.
 Creation of easier instances can be done by leaving out clauses
 which is going to lower the ratio and not affect satisfiability.
 
-TODO discuss the testbed used.
+\subsection{Testbed}
+
+This subsection describes the instances used for experimental evaluation.
+As mentioned in previous subsection only satisfiable instances are included
+and difficulty is reduced by leaving out certain number of clauses.
+It was chosen to test on instances with 50 variables of four difficulties ratios
+1.00, 2.12, 3.24 and 4.36.
+For each difficulty there is 100 instances.
+Table~\ref{testbed-table} summarizes the testbed.
+
+\begin{table}[ht]
+\caption{Properties of testbed used for experiments.}
+\label{testbed-table}
+\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\begin{tabular}{rrrr}
+\toprule
+Ratio & Variables & Clauses & Instances \\
+\midrule
+1.00 & 50 & 50  & 100 \\
+2.12 & 50 & 106 & 100 \\
+3.24 & 50 & 162 & 100 \\
+4.36 & 50 & 218 & 100 \\
+\bottomrule
+\end{tabular}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
 
 \section{Genetic Algorithm}
 
