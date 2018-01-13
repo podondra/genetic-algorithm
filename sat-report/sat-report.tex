@@ -304,6 +304,7 @@ where $y_i$ is value of $i$th variable, $w_i$ is the weight of $i$th
 variable and $m$ is the number of clauses in formula $F$.
 
 \subsection{Basic Evaluation}
+\label{sec:basic}
 
 This subsection present results of default parameters setting described above.
 It shows very poor performance
@@ -359,8 +360,12 @@ and \ref{basic-progress}.
 This figure presents boxplot of best fitness value from 30 runs
 on easy instance with clauses-to-variables ratio of 1.0.
 Average fitness value was 22873.93 with standard deviation 686.26.
-Standard deviation is too high so it can be concluded
-that the algorithm tends to get stuck in local optimum.
+Although standard deviation seems high it questionable if it is good or not.
+Because weights are sampled uniformly between values from 1 to 1024
+it is expected that average fitness value is about
+$\frac{1024 - 1} / 2 = 511.5$
+and really the average weight for this instance is 527.94.
+Then it would mean that the deviation in only one thing missing.
 
 \begin{figure}[ht]
 \vskip 0.2in
@@ -413,7 +418,7 @@ In spite of the fact the performance on the hardest instances
 this work is not concern with MAX-SAT but with weighted 3-SAT problem
 so robustness in respect to this problem should be evaluated.
 Figure~\ref{mutation-progress} show a progress of generation's fitness value
-on difficult instace with clauses-to-variables ratio 3.24.
+on difficult instance with clauses-to-variables ratio 3.24.
 The figure shows that there is a lot of exploration
 and almost no exploitation probably due to high randomness of mutation.
 But still there is the tournament selection which should drive the evolution.
@@ -431,7 +436,37 @@ The progress show a lot of exploration but is missing exploitation.}
 \vskip -0.2in
 \end{figure}
 
+One solution to this problem is to decay the mutation rate over time.
+Figure~\ref{decay-progress} shows experiment with decay rate 0.99 applied to
+mutation rate at each generation.
+The progress shows both exploration and exploitation.
+But when evaluated on easy instance same way as
+in section~\ref{sec:basic} the best average fitness is 22962.57
+with standard deviation 611.38 which is almost the same result.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{figs/decay-progress}}
+\caption{Both exploration and exploitation in progress of fitness on
+instance with clauses-to-variables 3.24 achieved by mutation decay.}
+\label{decay-progress}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+In order to decide if the standard deviation is big the genetic algorithm
+was run without mutation decay and with mutation decay of value 0.99 on
+hard instance (3.24 clauses-to-variables ratio)
+and 30 runs average of best fitness is presented.
+Without decay the average best fitness is $16693.48 \pm 1339.39$
+and with decay $15819.30 \pm 974.97$.
+Surely decay helps to exploit and gives more stable solution
+and so should be preferred but is not that robust. 
+
 \section{Conclusion}
+
+TODO conclusion.
 
 % In the unusual situation where you want a paper to appear in the
 % references without citing it in the main text, use \nocite
