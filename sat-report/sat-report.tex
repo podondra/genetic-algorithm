@@ -391,7 +391,7 @@ It almost seems that the algorithm is only exploiting one satisfiable solution.}
 One problem which prevents exploration might be roulette selection
 because as soon as satisfiable individual is found
 it is very unlikely to select unsatisfiable individual during selection
-due to very high fitness in comparison with the individual with negative fitness.
+due to very high fitness in comparison with the negative fitness individuals.
 Therefore tournament selection might explore more.
 
 Table~\ref{result-table} show that indeed this can significantly improve
@@ -412,6 +412,24 @@ number of unsatisfied clauses goes slowly to 0.
 In spite of the fact the performance on the hardest instances
 this work is not concern with MAX-SAT but with weighted 3-SAT problem
 so robustness in respect to this problem should be evaluated.
+Figure~\ref{mutation-progress} show a progress of generation's fitness value
+on difficult instace with clauses-to-variables ratio 3.24.
+The figure shows that there is a lot of exploration
+and almost no exploitation probably due to high randomness of mutation.
+But still there is the tournament selection which should drive the evolution.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{figs/mutation-progress}}
+\caption{Progress of fitness on harder instance with clauses-to-variables
+ratio 3.24. The genetic algorithm used is that without crossover,
+high mutation rate and tournament selection of size 2.
+The progress show a lot of exploration but is missing exploitation.}
+\label{mutation-progress}
+\end{center}
+\vskip -0.2in
+\end{figure}
 
 \section{Conclusion}
 
