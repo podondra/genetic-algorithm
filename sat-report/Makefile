@@ -10,4 +10,4 @@ pdf: $(TARGET).tex $(TARGET).bib
 
 clean:
 	$(RM) $(TARGET).pdf $(TARGET).aux $(TARGET).log $(TARGET).bbl \
-	    $(TARGET).blg $(TARGET).out
+	    $(TARGET).blg $(TARGET).out $(TARGET).tex.bak

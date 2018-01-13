@@ -7,6 +7,7 @@
 \usepackage{booktabs} % for professional tables
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{multirow}
 
 % hyperref makes hyperlinks in the resulting PDF.
 % If your build breaks (sometimes temporarily if a hyperlink spans a page)
@@ -140,6 +141,7 @@ Creation of easier instances can be done by leaving out clauses
 which is going to lower the ratio and not affect satisfiability.
 
 \subsection{Testbed}
+\label{testbed}
 
 This subsection describes the instances used for experimental evaluation.
 As mentioned in previous subsection only satisfiable instances are included
@@ -160,10 +162,10 @@ Table~\ref{testbed-table} summarizes the testbed.
 \toprule
 Ratio & Variables & Clauses & Instances \\
 \midrule
-1.00 & 50 & 50  & 100 \\
-2.12 & 50 & 106 & 100 \\
-3.24 & 50 & 162 & 100 \\
-4.36 & 50 & 218 & 100 \\
+1.00 & 50 & 50  & 30 \\
+2.12 & 50 & 106 & 30 \\
+3.24 & 50 & 162 & 30 \\
+4.36 & 50 & 218 & 30 \\
 \bottomrule
 \end{tabular}
 \end{sc}
@@ -255,22 +257,40 @@ from previous generation to next generation.
 
 \section{Experiments}
 
-TODO cite~\cite{gottlieb2002} and \cite{ellerweg2004}.
-
+This section presents results of experiments on testbed
+shown in section~\ref{testbed}.
+Goal is to find suitable parameters
+which can perform best on this testbed
+and so on wide spectrum of weighted 3-SAT instances.
 Experiments were carried out on Intel Core i5-3337U CPU (1.80GHz).
 
-\subsection{Fitness Functions}
+Default parameters are chosen according to proposition in~\cite{dejong1975}.
+Population size is 100 individuals, roulette selection,
+one point crossover with rate 0.6 per a pair of parents
+and mutation rate of value 0.001 per a bit.
+Moreover, one elite individual is moved to next generation
+and evolution is stopped
+if average fitness of last 100 generation does not increase by more than 1.
 
-TODO MAX-SAT fitness function from~\cite{dejong1989}:
+\subsection{Fitness Function}
+
+Fitness function employed in this work is derived from MAX-SAT fitness
+function~\cite{dejong1989} after reading \cite{gottlieb2002}
+and \cite{ellerweg2004}.
+MAX-SAT problem is concern with maximizing number of satisfied clauses.
+Thus it fitness function is the number of satisfied clauses:
 
 $$f_{\text{MAX-SAT}}(Y) = c_1(Y) + \dots + c_m(Y),$$
 
 where $m$ is the number of clauses and $c_i(x)$ is the truth value of the $i$th
 clause.
 
-The value of fitness function $f$ is the sum of weights of variables of value 1
+For purpose of weighted 3-SAT problem the MAX-SAT fitness function is
+incorporated into fitness function $f$
+which value is the sum of weights of variables of value 1
 if the formula is satisfied ($F(Y) = 1$)
-else it is negative number of unsatisfied clauses:
+else it is value of MAX-SAT fitness function $f_{\text{MAX-SAT}}(Y)$
+subtracted by total number of clauses $m$:
 
 $$
 f(Y) = 
@@ -280,11 +300,118 @@ f(Y) =
 \end{cases}
 $$
 
-where TODO.
+where $y_i$ is value of $i$th variable, $w_i$ is the weight of $i$th
+variable and $m$ is the number of clauses in formula $F$.
 
-\subsection{Selection Method}
+\subsection{Basic Evaluation}
 
-\subsection{Parameters}
+This subsection present results of default parameters setting described above.
+It shows very poor performance
+because it is able to satisfy only easy instances
+and also is not that robust.
+
+Table~\ref{result-table} contains success rate which is defined ratio
+of satisfied formulas to number of formulas
+in corresponding difficulty category.
+Then, there is an average number of unsatisfied clauses.
+
+It is obvious that basically parameterized genetic algorithm has problem
+with finding chromosome which satisfy non-trivial formulas.
+It shows for how many formulas the algorithm was able to find satisfiable
+assignment and if it was not able what is the average number of unsatisfied
+clauses.
+
+\begin{table}[ht]
+\caption{TODO}
+\label{result-table}
+\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\begin{tabular}{lrrr}
+\toprule
+Approach & Difficulty & SR & Unsatisfied \\
+\midrule
+\multirow{4}{*}{Basic} & 1.00 & 0.93 & 1.00 \\
+                       & 2.12 & 0.57 & 1.08 \\
+                       & 3.24 & 0.07 & 2.21 \\
+                       & 4.36 & 0.00 & 4.47 \\
+\midrule
+\multirow{4}{*}{Tournament} & 1.00 & 1.00 & 0.00 \\
+                            & 2.12 & 0.83 & 1.00 \\
+                            & 3.24 & 0.33 & 1.45 \\
+                            & 4.36 & 0.03 & 3.21 \\
+\midrule
+\multirow{4}{*}{Only mutation} & 1.00 & 1.00 & 0.00 \\
+                               & 2.12 & 1.00 & 0.00 \\
+                               & 3.24 & 0.70 & 1.33 \\
+                               & 4.36 & 0.03 & 2.24 \\
+\bottomrule
+\end{tabular}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+Robustness of this method is evaluated in figures~\ref{basic-boxplot}
+and \ref{basic-progress}.
+This figure presents boxplot of best fitness value from 30 runs
+on easy instance with clauses-to-variables ratio of 1.0.
+Average fitness value was 22873.93 with standard deviation 686.26.
+Standard deviation is too high so it can be concluded
+that the algorithm tends to get stuck in local optimum.
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{figs/basic-boxplot}}
+\caption{Boxplot of 30 best fitness values obtained on easy instance found
+by genetic algorithm with basic parameters.}
+\label{basic-boxplot}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{figs/basic-progress}}
+\caption{Fitness progress over generations of basic genetic algorithm on
+easy instance. The algorithm is able to find satisfiable assignment soon.
+On the other hand there is almost no exploration.
+It almost seems that the algorithm is only exploiting one satisfiable solution.}
+\label{basic-progress}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+\subsection{Selection}
+
+One problem which prevents exploration might be roulette selection
+because as soon as satisfiable individual is found
+it is very unlikely to select unsatisfiable individual during selection
+due to very high fitness in comparison with the individual with negative fitness.
+Therefore tournament selection might explore more.
+
+Table~\ref{result-table} show that indeed this can significantly improve
+success rate but for the instances with clauses-to-variable ratio of 3.24
+and 4.36 it is hard to find a satisfiable assignments.
+
+\subsection{Crossover and Mutation}
+
+Proposed in~\cite{park1995} crossover is considered marginal.
+Therefore an experiment with crossover rate 0.0 and higher mutation rate 0.01
+is carried out.
+
+As shown in table~\ref{result-table} this really improves success rate even
+for the most of second hardest instances.
+On contrary the performance for the hardest instances is very bad but the
+number of unsatisfied clauses goes slowly to 0.
+
+In spite of the fact the performance on the hardest instances
+this work is not concern with MAX-SAT but with weighted 3-SAT problem
+so robustness in respect to this problem should be evaluated.
 
 \section{Conclusion}
 
