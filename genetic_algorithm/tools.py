@@ -1,6 +1,45 @@
+import numpy
 import pandas
 from matplotlib import pyplot
 import itertools
+
+
+def read_sat_instances(files):
+    instances = {}
+    numpy.random.seed(74)
+    for file in files:
+        i = int(file[15:-4])
+        n, m, cnf = parse_dimacs(file)
+        for m in [50, 106, 162, 218]:
+            instances[(m, i)] = {
+                'n': n,
+                'm': m,
+                'formula': cnf[:m],
+                'weights': numpy.random.randint(1, 1024 + 1, size=n),
+            }
+    instances = pandas.DataFrame.from_dict(instances).T
+    instances['m'] = instances['m'].astype(numpy.int)
+    instances['n'] = instances['n'].astype(numpy.int)
+    instances['ratio'] = instances['m'] / instances['n']
+    return instances
+
+
+def sat_fitness(individual, cnf, weights):
+    m = len(cnf)
+    # evaluate formula
+    satisfied_clauses = 0
+    for clause in cnf:
+        for v in clause:
+            idx = abs(v) - 1
+            bit = individual[idx]
+            if (v < 0 and bit == 0) or (v > 0 and bit == 1):
+                satisfied_clauses += 1
+                break
+    # if satisfied sum weights
+    if m == satisfied_clauses:
+        return (sum(v * w for v, w in zip(individual, weights)),)
+    else:
+        return (satisfied_clauses - m,)
 
 
 def parse_dimacs(dimacs_file):

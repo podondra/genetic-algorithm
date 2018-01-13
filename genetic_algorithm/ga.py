@@ -64,7 +64,7 @@ def genetic_algorithm(population, toolbox, early_stop, cxpb, mutpb, elitism,
         record_stats(stats, logbook, population, invalids, g, verbose)
 
         # for early stop
-        if logbook[-1]['avg'] + inc >= best_avg:
+        if logbook[-1]['avg'] - inc >= best_avg:
             best_avg = logbook[-1]['avg']
             last_inc = g
 
