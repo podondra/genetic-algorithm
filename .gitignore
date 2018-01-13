@@ -5,6 +5,8 @@ example_paper.*
 *.bbl
 *.blg
 *-report.pdf
+*.bak
+data/sat/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

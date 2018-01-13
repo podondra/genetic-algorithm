@@ -114,17 +114,32 @@ from SATLIB Benchmark Problems~\cite{hoos2000} are going to be used.
 Since genetic algorithms is \textit{incomplete algorithm}\footnote{Incomplete
 algorithms for SAT are able to decide if a given formula is satisfiable by
 finding a truth assignment
-but they cannot detect contradictory formulas thus ascertain unsatisfiability.}
+but they cannot detect contradictory formulas
+thus ascertain unsatisfiability.~\cite{ellerweg2004}}
 only satisfiable instances are included.
 
-TODO from which range to generate random weights.
+The instances are in DIMACS format
+which means that they do not contain weights so they are uniformly randomly
+generated from set of natural numbers less or equal than TODO.
+The upper bound should affect the fitness of an individual
+therefore such arbitrary number was chosen.
 
-The instances are in DIMACS format but it is without weights
-so they are randomly generated.
+In order to measure performance of a genetic algorithm
+there is a need differently difficult formulas.
+A number of paper have claimed that most randomly generated instances are
+not that difficult.
+But it was empirically found that 3-SAT difficulty depends on ratio of
+number of clauses and variables $\frac{m}{n}$.
+The most difficult instances has about 4.3 times more clauses than variables.
+\cite{selman1996}
 
-TODO discuss instances difficulty and cite~\cite{selman1996}.
+Instances from SATLIB Benchmark Problems have usually the highest difficulty.
+For example, there are instances with 218 clauses and 50 variables
+giving clauses-to-variables ratio of 4.36.
+Creation of easier instances can be done by leaving out clauses
+which is going to lower the ratio and not affect satisfiability.
+
 TODO discuss the testbed used.
-TODO create easier instances by leaving out clauses.
 
 \section{Genetic Algorithm}
 
@@ -229,8 +244,8 @@ else it is negative number of unsatisfied clauses:
 $$
 f(Y) = 
 \begin{cases} 
-    \sum_{i = 1}^m y_i w_i & \text{if } F(Y) = 1 \\
-    m - f_{\text{MAX-SAT}}(Y) & \text{if } F(Y) = 0,
+    \sum_{i = 1}^m y_i w_i & \text{if } F(Y) = 1, \\
+    f_{\text{MAX-SAT}}(Y) - m & \text{if } F(Y) = 0,
 \end{cases}
 $$
 
